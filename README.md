@@ -109,8 +109,6 @@ docker-compose up --build         # rebuild and start the docker containers
 
 ### MISC PACKAGES
 
-http://chancejs.com/ - used to generate randomly selected text for a Respondent, but keep it consistent each time it's built. Has plenty of other features that can be used.
-
 https://github.com/dylang/shortid - used for lookupIds and can be used for url shortening.
 
 https://github.com/express-validator/express-validator - can be used for server validation middleware for any requests
