@@ -1,0 +1,93 @@
+{
+  "name": "node-server-boilerplate",
+  "version": "0.0.1",
+  "description": "Boilerplate Node App",
+  "main": "src/run.js",
+  "license": "UNLICENSED",
+  "scripts": {
+    "docker:test": "docker-compose exec -T app sh -c 'NODE_ENV=test yarn test'",
+    "docker:resetTestDb": "docker-compose exec -T app sh -c 'source ./docker/dev/reset-test-db.sh'",
+    "docker:resetDevDb": "docker-compose exec -T app sh -c 'source ./docker/dev/reset-dev-db.sh'",
+    "dev": "NODE_ENV=development && nodemon --watch __mocks__ --watch src \"src/run.js\"",
+    "clean": "find . -name 'node_modules' -type d -prune | xargs rm -rf",
+    "start": "node src/run.js",
+    "prepush": "npm run docker:test",
+    "precommit": "lint-staged",
+    "initDb": "sh src/db/initDB",
+    "initTestDb": "sh src/db/initTestDB",
+    "seeder": "node src/db/seeders/index.js",
+    "seederTestDb": "NODE_ENV=test node src/db/seeders/index.js",
+    "ramblerTest": "export $(go env | grep GOPATH | xargs) && $GOPATH/bin/rambler -c config/rambler.json -e testing apply -a",
+    "lint": "eslint src",
+    "lint:watch": "esw -w src/",
+    "test": "jest src --runInBand --coverage",
+    "test:watch": "jest --watchAll"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "git add",
+      "npm run lint"
+    ]
+  },
+  "dependencies": {
+    "apollo-server": "^2.4.8",
+    "apollo-server-express": "^2.4.8",
+    "apollo-server-testing": "^2.4.8",
+    "babel-eslint": "^10.0.1",
+    "bcrypt": "^2.0.0",
+    "body-parser": "^1.13.3",
+    "chance": "^1.0.18",
+    "compression": "^1.7.2",
+    "connect-session-sequelize": "^5.2.1",
+    "cors": "^2.7.1",
+    "dotenv": "^5.0.0",
+    "ejs": "^2.5.7",
+    "express": "^4.13.3",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.1.2",
+    "graphql": "^14.2.0",
+    "graphql-iso-date": "^3.6.1",
+    "graphql-tools": "^4.0.4",
+    "graphql-type-json": "^0.2.4",
+    "helmet": "^3.12.0",
+    "jsonwebtoken": "^8.1.0",
+    "lodash": "^4.17.5",
+    "merge-graphql-schemas": "^1.5.8",
+    "moment": "^2.22.1",
+    "morgan": "^1.8.0",
+    "nock": "^10.0.6",
+    "pg": "6",
+    "pg-hstore": "^2.3.2",
+    "redis": "^2.8.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
+    "sequelize": "^4.32.6",
+    "shortid": "^2.2.8",
+    "socket.io": "^2.1.1",
+    "supertest-session": "^3.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^21.3.2",
+    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-watch": "^4.0.2",
+    "husky": "^0.14.3",
+    "jest": "^23.6.0",
+    "lint-staged": "^6.1.0",
+    "nodemon": "^1.18.7",
+    "prettier": "1.15.2",
+    "rewire": "^4.0.1",
+    "supertest": "^3.0.0"
+  },
+  "jest": {
+    "automock": false,
+    "testEnvironment": "node",
+    "setupFiles": [
+      "<rootDir>/src/lib/testHelpers/setupTests.js"
+    ]
+  }
+}

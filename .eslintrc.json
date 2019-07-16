@@ -1,0 +1,39 @@
+{
+  "extends": [
+    "airbnb-base",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "env": {
+    "node": true,
+    "jest": true,
+    "es6": true
+  },
+  "rules": {
+    "arrow-parens": "off",
+    "object-curly-newline": "off",
+    "function-paren-newline": "off",
+    "no-console": "off",
+    "no-unused-vars": "error",
+    "no-use-before-define": "off",
+    "no-restricted-globals": "off",
+    "no-param-reassign": "off",
+    "no-restricted-syntax": ["error", "ForInStatement", "BinaryExpression[operator='in']", "WithStatement", "LabeledStatement"],
+    "no-await-in-loop": "off",
+    "radix": "off",
+    "semi": ["error", "never"],
+    "comma-dangle": ["error", "never"],
+    "max-len": ["error", 140, 2, {
+      "ignoreUrls": true,
+      "ignoreComments": true
+    }],
+    "implicit-arrow-linebreak": "off"
+  },
+  "plugins": ["jest"]
+}

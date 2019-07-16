@@ -1,0 +1,72 @@
+#
+# Docker Compose configuration
+#
+# This is used for local development only, not for deployments.
+#
+# See README.md for usage instructions.
+#
+
+version: "3.7"
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/dev/Dockerfile.app
+    ports:
+      - 3005:3005
+      - 9229:9229 # for attaching Chrome's inspector to a running node process (app or mocha)
+    depends_on:
+      - db
+      - cache
+    links:
+      - db
+      - cache
+    env_file:
+      - ./.env
+    volumes:
+      - type: bind
+        source: ./.env
+        target: /container/.env
+      - type: bind
+        source: ./src
+        target: /container/src
+      - type: bind
+        source: ./__mocks__
+        target: /container/__mocks__
+      - type: bind
+        source: ./config
+        target: /container/config
+      - type: bind
+        source: ./docker
+        target: /container/docker
+      - type: bind
+        source: ./package.json
+        target: /container/package.json
+      - type: bind
+        source: ./yarn.lock
+        target: /container/yarn.lock
+    networks:
+    - mock_server
+
+  db:
+    image: postgres
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: ""
+    networks:
+    - mock_server
+
+  cache:
+    image: redis
+    ports:
+    - 6379:6379
+    networks:
+    - mock_server
+
+networks:
+  mock_server:
+    driver: bridge

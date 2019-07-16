@@ -1,0 +1,29 @@
+{
+  "driver": "postgresql",
+  "protocol": "tcp",
+  "host": "localhost",
+  "port": 5432,
+  "user": "postgres",
+  "password": "",
+  "database": "mock_development",
+  "directory": "./src/db/migrations",
+  "table": "migrations",
+  "environments": {
+    "dockerdev": {
+      "database": "mock_development",
+      "host": "db",
+      "directory": "/container/src/db/migrations"
+    },
+    "dockertest": {
+      "database": "mock_test",
+      "host": "db",
+      "directory": "/container/src/db/migrations"
+    },
+    "development": {
+      "database": "mock_development"
+    },
+    "testing": {
+      "database": "mock_test"
+    }
+  }
+}

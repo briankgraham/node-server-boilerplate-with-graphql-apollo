@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "DROP DATABASE IF EXISTS MOCK_TEST; CREATE DATABASE MOCK_TEST;" | psql -U postgres -h localhost -p 5432

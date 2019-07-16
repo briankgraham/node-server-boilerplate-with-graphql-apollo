@@ -1,0 +1,68 @@
+{
+  "users.view.all": {
+    "superadmin": true,
+    "admin": true,
+    "standard": false,
+    "external": false
+  },
+  "users.view.active": {
+    "superadmin": true,
+    "admin": true,
+    "standard": true,
+    "external": false
+  },
+  "users.view.list": {
+    "superadmin": true,
+    "admin": true,
+    "standard": false,
+    "external": false
+  },
+  "users.archive.all": {
+    "superadmin": true,
+    "admin": true,
+    "standard": false,
+    "external": false
+  },
+  "users.delete.all": {
+    "superadmin": true,
+    "admin": true,
+    "standard": false,
+    "external": false
+  },
+  "users.archive.self": {
+    "superadmin": true,
+    "admin": true,
+    "standard": true,
+    "external": true
+  },
+  "users.delete.self": {
+    "superadmin": true,
+    "admin": true,
+    "standard": true,
+    "external": true
+  },
+  "users.edit.all": {
+    "superadmin": true,
+    "admin": true,
+    "standard": false,
+    "external": false
+  },
+  "users.edit.self": {
+    "superadmin": true,
+    "admin": true,
+    "standard": true,
+    "external": true
+  },
+  "users.invite": {
+    "superadmin": true,
+    "admin": true,
+    "standard": false,
+    "external": false
+  },
+  "users.invite.all": {
+    "superadmin": true,
+    "admin": true,
+    "standard": false,
+    "external": false
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "datasets.view.all": {
+    "superadmin": true,
+    "admin": true,
+    "manager": true,
+    "recruiter": true,
+    "external": true
+  },
+  "datasets.view.list": {
+    "superadmin": true,
+    "admin": true,
+    "manager": true,
+    "recruiter": false,
+    "external": false
+  },
+  "datasets.create": {
+    "superadmin": true,
+    "admin": true,
+    "manager": true,
+    "recruiter": false,
+    "external": false
+  },
+  "datasets.edit": {
+    "superadmin": true,
+    "admin": true,
+    "manager": true,
+    "recruiter": false,
+    "external": false
+  },
+  "datasets.delete": {
+    "superadmin": true,
+    "admin": true,
+    "manager": true,
+    "recruiter": false,
+    "external": false
+  }
+}

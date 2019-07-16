@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "DROP DATABASE IF EXISTS MOCK_DEVELOPMENT; CREATE DATABASE MOCK_DEVELOPMENT;" | psql
+
+~/go/bin/rambler -c config/rambler.json apply -a

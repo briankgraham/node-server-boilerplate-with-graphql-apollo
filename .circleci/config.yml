@@ -1,0 +1,88 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.12.6-stretch
+      - image: circleci/postgres:9.6-alpine-postgis-ram
+
+    environment:
+      RAMBLER_HOST: localhost
+      RAMBLER_USER: postgres
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: Install PostgreSQL Client
+          command: |
+
+              echo "deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+
+              wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+              sudo apt-get update
+
+              sudo apt-get install postgresql-client-9.6
+      - run: yarn install
+
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      - run: yarn run initTestDb
+      - run: |
+          echo 'Waiting 10s for postgres to come online' &&
+          sleep 10 &&
+          curl -k -s -L -o ./rambler "https://github.com/elwinar/rambler/releases/download/v4.0.0/rambler-linux-amd64" &&
+          chmod +x ./rambler &&
+          ./rambler -c config/rambler.json -e testing apply -a
+      - run: NODE_ENV=test yarn run seeder
+      - run: yarn test
+      - run: sudo apt-get update && sudo apt-get install -qq -y python-pip libpython-dev
+      - run: curl -O https://bootstrap.pypa.io/get-pip.py && sudo python get-pip.py
+      - run: sudo pip install --upgrade awscli
+      - run: sudo apt-get update && sudo apt-get install jq
+      - run: sudo curl -L -o /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5rc1/jq-linux-x86_64-static && sudo chmod +x /usr/bin/jq
+      - run: sudo curl -L -o /usr/bin/ecs-deploy https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy && sudo chmod +x /usr/bin/ecs-deploy
+      - setup_remote_docker:
+          docker_layer_caching: true
+          version: 17.03.0-ce
+      - run:
+          name: Update AWS ECS task definitions
+          no_output_timeout: 30m
+          command: |
+              if [ "${CIRCLE_BRANCH}" == "staging" ];
+                then
+                # Login to AWS
+                $(aws ecr get-login --no-include-email --region $AWS_REGION)
+                TAG=$(echo $CIRCLE_SHA1 | cut -c -7)
+                docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/add-your-server:$TAG .
+                docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/add-your-server:$TAG
+                ecs-deploy --timeout 420 -c $CLUSTER_NAME -n $SERVICE_NAME -i $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/add-your-server:$TAG
+              fi
+              if [ "${CIRCLE_BRANCH}" == "master" ];
+                then
+                # Login to AWS
+                $(aws ecr get-login --no-include-email --region $AWS_REGION)
+                TAG=$(echo $CIRCLE_SHA1 | cut -c -7)
+                docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/add-your-server:$TAG .
+                docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/add-your-server:$TAG
+                ecs-deploy --timeout 420 -c $CLUSTER_NAME_PROD -n $SERVICE_NAME_PROD -i $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/add-your-server:$TAG
+              fi
