@@ -35,7 +35,7 @@
     "apollo-server-express": "^2.4.8",
     "apollo-server-testing": "^2.4.8",
     "babel-eslint": "^10.0.1",
-    "bcrypt": "^2.0.0",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.13.3",
     "chance": "^1.0.18",
     "compression": "^1.7.2",
